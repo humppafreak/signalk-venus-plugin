@@ -199,6 +199,14 @@ export const getMappings = (
       conversion: celsiusToKelvin,
       units: 'K'
     },
+    // raw value as reported by the controller, unit not documented
+    '/Motor/Torque': {
+      path: (m) => propulsionPath(m, 'torque')
+    },
+    // raw direction code (0 = neutral, 1 and 2 = the two drive directions)
+    '/Motor/Direction': {
+      path: (m) => propulsionPath(m, 'direction')
+    },
     '/Dc/0/MidVoltageDeviation': {
       path: (m) => {
         return makePath(m, `${m.instanceName}.midVoltageDeviation`)
