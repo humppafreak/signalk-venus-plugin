@@ -64,6 +64,13 @@ export type VenusToSignalKRegExMapping = {
   mappings: VenusToSignalKMapping[]
 }
 
+// com.victronenergy.motordrive reports under the SignalK propulsion tree,
+// not electrical.*, so it gets its own path builder.
+const propulsionPath = (m: Message, name: string) =>
+  m.senderName.startsWith('com.victronenergy.motordrive')
+    ? `propulsion.${m.instanceName}.${name}`
+    : undefined
+
 export const getMappings = (
   app: ServerAPI,
   options: any,
@@ -174,6 +181,21 @@ export const getMappings = (
       path: (m) => {
         return makePath(m, `${m.instanceName}.temperature`)
       },
+      conversion: celsiusToKelvin,
+      units: 'K'
+    },
+    '/Motor/RPM': {
+      path: (m) => propulsionPath(m, 'revolutions'),
+      conversion: (m: Message) => Number(m.value) / 60,
+      units: 'Hz'
+    },
+    '/Motor/Temperature': {
+      path: (m) => propulsionPath(m, 'temperature'),
+      conversion: celsiusToKelvin,
+      units: 'K'
+    },
+    '/Controller/Temperature': {
+      path: (m) => propulsionPath(m, 'controllerTemperature'),
       conversion: celsiusToKelvin,
       units: 'K'
     },
