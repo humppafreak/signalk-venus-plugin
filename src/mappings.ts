@@ -199,9 +199,10 @@ export const getMappings = (
       conversion: celsiusToKelvin,
       units: 'K'
     },
-    // raw value as reported by the controller, unit not documented
+    // newton metres, as shown on the Cerbo GX boat page
     '/Motor/Torque': {
-      path: (m) => propulsionPath(m, 'torque')
+      path: (m) => propulsionPath(m, 'torque'),
+      units: 'Nm'
     },
     // raw direction code (0 = neutral, 1 and 2 = the two drive directions)
     '/Motor/Direction': {
